@@ -49,8 +49,9 @@ type Item struct {
 }
 
 // JSONを取得するURL
+const baseURL = "https://inline.inajob.freeddns.org"
 const jsonURL = "https://inline.inajob.freeddns.org/page/twitter-5643382?detail=1"
-const baseURL = "https://inline.inajob.freeddns.org/web?user=twitter-5643382&id=" // RSSアイテムのリンクのベースURL
+const itemURLPrefix = "https://inline.inajob.freeddns.org/web?user=twitter-5643382&id=" // RSSアイテムのリンクのベースURL
 
 func main() {
 	// 1. URLからJSONデータを取得する
@@ -96,13 +97,13 @@ func main() {
 	}
 
 	for _, page := range pagesToProcess {
-		itemLink := baseURL + url.PathEscape(page.Name)
+		itemLink := itemURLPrefix + url.PathEscape(page.Name)
 		itemGUID := itemLink
 
 		// descriptionに画像を含める処理
 		htmlDescription := ""
 		if page.Cover != "" {
-			htmlDescription += fmt.Sprintf("<p><img src=\"%s\" alt=\"%s\" style=\"max-width:100%%; height:auto;\" /></p>\n", html.EscapeString(page.Cover), html.EscapeString(page.Name))
+			htmlDescription += fmt.Sprintf("<p><img src=\"%s\" alt=\"%s\" style=\"max-width:100%%; height:auto;\" /></p>\n", baseURL + html.EscapeString(page.Cover), html.EscapeString(page.Name))
 		}
 		htmlDescription += fmt.Sprintf("<p>%s</p>", html.EscapeString(page.Description))
 
