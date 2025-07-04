@@ -103,7 +103,21 @@ func main() {
 		// descriptionに画像を含める処理
 		htmlDescription := ""
 		if page.Cover != "" {
-			htmlDescription += fmt.Sprintf("<p><img src=\"%s\" alt=\"%s\" style=\"max-width:100%%; height:auto;\" /></p>\n", baseURL + html.EscapeString(page.Cover), html.EscapeString(page.Name))
+			parsedCoverURL, err := url.Parse(page.Cover)
+                        var resolvedCoverURL string
+                        if err != nil {
+                            // cover URL自体が無効な場合
+			    //log.Printf("警告: cover URL '%s' のパースエラー: %v. 元のURLをそのまま使用します。", page.Cover, err)
+                            resolvedCoverURL = page.Cover // パースエラーでも一応元の文字列を使う
+                        } else if !parsedCoverURL.IsAbs() {
+                            // 相対URLの場合 (IsAbs()がfalseを返す)
+                            resolvedCoverURL = baseURL + html.EscapeString(page.Cover)
+                        } else {
+                            // 絶対URLの場合
+                            resolvedCoverURL = page.Cover
+                        }
+
+			htmlDescription += fmt.Sprintf("<p><img src=\"%s\" alt=\"%s\" style=\"max-width:100%%; height:auto;\" /></p>\n", resolvedCoverURL, resolvedCoverURL)
 		}
 		htmlDescription += fmt.Sprintf("<p>%s</p>", html.EscapeString(page.Description))
 
