@@ -50,6 +50,7 @@ type Item struct {
 
 // JSONを取得するURL
 const baseURL = "https://inline.inajob.freeddns.org"
+const frontURL = "https://inline.inajob.freeddns.org/web?user=twitter-5643382&id=FrontPage"
 const jsonURL = "https://inline.inajob.freeddns.org/page/twitter-5643382?detail=1"
 const itemURLPrefix = "https://inline.inajob.freeddns.org/web?user=twitter-5643382&id=" // RSSアイテムのリンクのベースURL
 
@@ -81,11 +82,11 @@ func main() {
 		Version: "2.0",
 		Channel: &Channel{
 			Title:         "inajob Inline Feed",
-			Link:          baseURL,
+			Link:          frontURL,
 			Description:   "An RSS feed generated from inline.inajob.freeddns.org pages.",
 			LastBuildDate: now,
 			PubDate:       now,
-			TTL:           60,
+			TTL:           60 * 12,
 			Items:         []Item{},
 		},
 	}
