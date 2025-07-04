@@ -20,8 +20,10 @@ jobs:
       uses: actions/setup-go@v5
       with:
         go-version: '1.22' # 使用したいGoのバージョンを指定します
+    - name: Make dir
+      run: mkdir out
     - name: Run Go program
-      run: go run main.go > feed.xml # 実行したいGoのファイルを指定します
+      run: go run main.go > ./out/feed.xml # 実行したいGoのファイルを指定します
 
     - name: SFTP upload feed.xml
       uses: Dylan700/sftp-upload-action@latest # SFTPアップロード用のアクション
@@ -32,5 +34,5 @@ jobs:
         port: ${{ secrets.SFTP_PORT }} # オプション、デフォルトは22
 
         uploads: |
-          feed.xml => /blob-store/public/feed.xml
+          ./out/ => /blob-store/public/
 
